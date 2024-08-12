@@ -20,14 +20,16 @@ const AddClientModal = ({ isOpen, onClose, onAddClient }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [membership, setMembership] = useState("");
+  const [expiryDate, setExpiryDate] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onAddClient({ name, email, membership });
+    onAddClient({ name, email, membership, expiryDate });
     onClose();
     setName("");
     setEmail("");
     setMembership("");
+    setExpiryDate("");
   };
 
   return (
@@ -61,6 +63,13 @@ const AddClientModal = ({ isOpen, onClose, onAddClient }) => {
                 <SelectItem value="Gold">Gold</SelectItem>
               </SelectContent>
             </Select>
+            <Input
+              type="date"
+              placeholder="Expiry Date"
+              value={expiryDate}
+              onChange={(e) => setExpiryDate(e.target.value)}
+              required
+            />
           </div>
           <DialogFooter>
             <Button type="submit">Add Client</Button>
