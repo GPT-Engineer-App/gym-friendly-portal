@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/table";
 import { Plus } from "lucide-react";
 import AddClientModal from "../components/AddClientModal";
+import MpesaPayment from "../components/MpesaPayment";
 
 const OwnerDashboard = () => {
   const [clients, setClients] = useState([
@@ -19,14 +20,14 @@ const OwnerDashboard = () => {
     { id: 3, name: "Bob Johnson", email: "bob@example.com", membership: "Bronze", expiryDate: "2023-10-31" },
   ]);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [selectedClient, setSelectedClient] = useState(null);
 
   const handleAddClient = (newClient) => {
     setClients([...clients, { id: clients.length + 1, ...newClient }]);
   };
 
-  const handlePromptPayment = (clientId) => {
-    // Implement Mpesa Daraja API call here
-    console.log(`Prompting payment for client ${clientId}`);
+  const handlePromptPayment = (client) => {
+    setSelectedClient(client);
   };
 
   return (
@@ -60,7 +61,7 @@ const OwnerDashboard = () => {
               <TableCell>{client.membership}</TableCell>
               <TableCell>{client.expiryDate}</TableCell>
               <TableCell>
-                <Button onClick={() => handlePromptPayment(client.id)}>Prompt Payment</Button>
+                <Button onClick={() => handlePromptPayment(client)}>Prompt Payment</Button>
               </TableCell>
             </TableRow>
           ))}
@@ -71,6 +72,12 @@ const OwnerDashboard = () => {
         onClose={() => setIsAddModalOpen(false)}
         onAddClient={handleAddClient}
       />
+      {selectedClient && (
+        <div className="mt-8">
+          <h2 className="text-2xl font-bold mb-4">Prompt Payment for {selectedClient.name}</h2>
+          <MpesaPayment clientId={selectedClient.id} amount={100} /> {/* Set appropriate amount */}
+        </div>
+      )}
     </div>
   );
 };
