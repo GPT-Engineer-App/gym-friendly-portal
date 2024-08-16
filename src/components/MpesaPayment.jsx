@@ -4,8 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 
-const MPESA_BASE_URL = 'https://sandbox.safaricom.co.ke';
-
 const MpesaPayment = ({ clientId, amount }) => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -14,7 +12,7 @@ const MpesaPayment = ({ clientId, amount }) => {
     setIsLoading(true);
     try {
       // Step 1: Register C2B URLs (this should be done once, not for every payment)
-      await registerC2BUrls();
+      await axios.post('/api/register-urls');
 
       // Step 2: Initiate payment
       const response = await axios.post('/api/initiate-payment', {
@@ -33,15 +31,6 @@ const MpesaPayment = ({ clientId, amount }) => {
       toast.error("An error occurred. Please try again later.");
     } finally {
       setIsLoading(false);
-    }
-  };
-
-  const registerC2BUrls = async () => {
-    try {
-      const response = await axios.post('/api/register-urls');
-      console.log('C2B URLs registered:', response.data);
-    } catch (error) {
-      console.error('Error registering C2B URLs:', error);
     }
   };
 
